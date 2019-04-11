@@ -1,0 +1,85 @@
+<comment>
+problem   = Keplerian disk in cylindrical coordinates
+reference =
+configure = --prob=bl --coord=cylindrical --eos isothermal -hdf5 -mpi -fft 
+sim_name  = {name:}
+
+<job>
+problem_id  = disk      # problem ID: basename of output filenames
+
+<output1>
+file_type   = hdf5      # data dump
+variable    = cons      #
+id          = cons
+dt          = 6.283185307179586 # time increment between outputs
+
+<output2>
+file_type   = hdf5
+variable    = FT-Range
+id          = FT
+dt          = 0.6283185307179586
+x2_slice    = 0.0000001 # 0 < x2_slice < nx2 * block_size.dx2
+xdmf        = 0
+
+<output3>
+file_type   = hdf5
+variable    = FT-Range
+id          = FT2
+dt          = 0.6283185307179586
+next_time   = 0.06283185307179586
+x2_slice    = 0.0000001
+xdmf        = 0
+
+<output4>
+file_type   = rst       # data dump
+dt          = 62.8      # time increment between outputs
+
+<time>
+cfl_number  = 0.3       # The Courant, Friedrichs, & Lewy (CFL) Number
+nlim        = -1        # cycle limit
+tlim        = {tlim:}       # time limit
+
+<mesh>
+nx1         = {nx1:d}            # Number of zones in X1-direction
+x1min       = {x1min:f}           # minimum value of X1
+x1max       = {x1max:f}              # maximum value of X1
+ix1_bc      = user           # Inner-X1 boundary condition flag
+ox1_bc      = user           # Outer-X1 boundary condition flag
+x1rat       = {x1rat:.16f}
+
+nx2         = {nx2:d}            # Number of zones in X2-direction
+x2min       = 0.             # minimum value of X2
+x2max       = 6.283185307179586 # maximum value of X2
+ix2_bc      = periodic       # Inner-X2 boundary condition flag
+ox2_bc      = periodic       # Outer-X2 boundary condition flag
+
+nx3         = 1              # Number of zones in X3-direction
+x3min       = -0.4           # minimum value of X3
+x3max       = 0.4            # maximum value of X3
+ix3_bc      = user           # Inner-X3 boundary condition flag
+ox3_bc      = user           # Outer-X3 boundary condition flag
+
+<meshblock>
+nx1         = {mb_nx1:d}
+nx2         = {mb_nx2:d}
+nx3         = 1
+
+refinement  = None
+
+<hydro>
+gamma           = 1.0 #66666667 # gamma = C_p/C_v
+iso_sound_speed = {cs:.16f} # isothermal sound speed
+dfloor          = 1.e-6
+pfloor          = 1.e-9
+
+<problem>
+GM              = 1.0
+r0              = 1.0
+rho0            = 1.0
+p0_over_r0      = 0.01
+p0overr0        = 0.01
+pslope          = -0.5
+dslope          = -2.25
+slow_fft_flag   = 1
+seed            = {seed:}
+seedAmp         = {seedAmp:f}
